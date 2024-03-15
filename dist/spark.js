@@ -3866,7 +3866,16 @@
                         }
                         const resp = JSON.parse(event.data);
                         if (resp.header.code !== 0) {
-                            throw new Error(`code: ${resp.header.code}, sid: ${resp.header.sid}, message: ${resp.header.message}`);
+                          const text = resp.header.message || "[Unknow error]  Please try again later.";
+                          const result = {
+                            text,
+                            uasge: null,
+                          };
+                          resolve(result);
+                          close();
+                          end = true;
+                          return;
+                            // throw new Error(`code: ${resp.header.code}, sid: ${resp.header.sid}, message: ${resp.header.message}`);
                         }
                         const text = resp.payload.choices.text
                             .map((t) => t.content)
